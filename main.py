@@ -50,3 +50,13 @@ if __name__ == "__main__":
     except Exception as e:
         # 生产可替换为结构化日志；避免输出敏感上下文
         print(f"Login error: {e}")
+
+def insecure_database_connect():
+    # 这行代码会 100% 触发 Bandit 的 B105 (硬编码密码) 警报
+    db_password = "SuperSecretPassword123!"
+    
+    # 这行代码会 100% 触发 Bandit 的 B324 (使用不安全的 MD5 哈希算法) 警报
+    import hashlib
+    m = hashlib.md5()
+    
+    print("Connecting to database with insecure configs...")
