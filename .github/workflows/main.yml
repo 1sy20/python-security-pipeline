@@ -1,0 +1,30 @@
+name: Python Security SAST
+
+# 触发条件：当有代码推送到 main 分支时触发
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest # 使用最新的 Ubuntu 虚拟环境
+
+    steps:
+    # 第一步：拉取仓库里的代码
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 第二步：安装 Python 环境
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    # 第三步：安装安全扫描工具 Bandit
+    - name: Install Bandit
+      run: pip install bandit
+
+    # 第四步：执行安全扫描！
+    - name: Run Bandit Scan
+      run: bandit -r . -f custom 
+      # -r 表示递归扫描整个目录，如果发现高危漏洞，流水线会自动标红报错（阻断）
